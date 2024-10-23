@@ -1,13 +1,18 @@
-import { Contract, ethers } from "ethers";
-import { getContractAt } from "@nomiclabs/hardhat-ethers/internal/helpers";
+import { Contract, ethers } from "ethers"; 
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { env } from "./env";
+
+import { env } from "./env"; 
 import { getProvider } from "./provider";
 
-export function getContract(
+export async function getContract(
   name: string,
   hre: HardhatRuntimeEnvironment
 ): Promise<Contract> {
+  
   const WALLET = new ethers.Wallet(env("ETH_PRIVATE_KEY"), getProvider());
-  return getContractAt(hre, name, env("NFT_CONTRACT_ADDRESS"), WALLET);
+
+  const contract = await hre.ethers.getContractAt(name, env("NFT_CONTRACT_ADDRESS"), WALLET);
+
+  return contract;
 }
+
